@@ -1,8 +1,10 @@
 package com.i2i.ssh.tunnelling;
 
+import com.i2i.ssh.tunnelling.configuration.MSAccConfiguration;
 import com.i2i.ssh.tunnelling.configuration.MSIntConfiguration;
 import com.i2i.ssh.tunnelling.configuration.Test5Configuration;
 import com.i2i.ssh.tunnelling.configuration.Test7Configuration;
+import com.jcraft.jsch.JSchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class Launch implements CommandLineRunner {
     MSIntConfiguration msIntConfiguration;
 
     @Autowired
+    MSAccConfiguration msAccConfiguration;
+
+    @Autowired
     Test7Configuration test7Configuration;
 
     @Autowired
@@ -30,14 +35,15 @@ public class Launch implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws JSchException {
         try {
+            //msAccConfiguration.portForward();
             msIntConfiguration.portForward();
-            test7Configuration.portForward();
-            test5Configuration.portForward();
+           // test7Configuration.portForward();
+           // test5Configuration.portForward();
         } catch (Exception exception){
             logger.error("Try to connect Vpn, UnknownHostException Exception -> {}",exception.getMessage());
-            throw new RuntimeException("Fatal Error",exception);
+            msAccConfiguration.portForward();
         }
     }
 }
